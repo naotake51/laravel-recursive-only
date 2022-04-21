@@ -8,7 +8,8 @@ Make Laravel's `only` a little more useful.
 
 ## Requirements
 
-TODO
+- PHP: `^7.1 || ^8.0`
+- Laravel: `^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0`
 
 ## Install
 
