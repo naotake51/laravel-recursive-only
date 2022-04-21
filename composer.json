@@ -34,5 +34,7 @@
                 "Naotake51\\RecursiveOnly\\RecursiveOnlyServiceProvider"
             ]
         }
-    }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
