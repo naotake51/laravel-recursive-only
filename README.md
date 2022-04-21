@@ -52,7 +52,7 @@ $data = $post->recursiveOnly([
     ],
     'comments' => [
         '*' => [
-            'title' => fn ($value) => "# $value", // use callback
+            'title' => fn ($value /**, ...parents */) => "# $value", // use callback
             'body',
         ]
     ]

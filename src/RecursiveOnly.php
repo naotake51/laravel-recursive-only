@@ -14,8 +14,9 @@ class RecursiveOnly
      * @param  array $only
      * @return Collection
      */
-    public function recursiveOnlyForCollection(Collection $collection, array $only): Collection
+    public function recursiveOnlyForCollection(Collection $collection, array $only, array $parents = []): Collection
     {
+        $parents[] = $collection;
         $result = [];
 
         foreach ($only as $name => $nest) {
@@ -23,10 +24,10 @@ class RecursiveOnly
 
             if ($name === '*') {
                 foreach ($collection as $key => $value) {
-                    $result[$key] = $this->getValue($value, $nest);
+                    $result[$key] = $this->getValue($value, $nest, $parents);
                 }
             } else {
-                $result[$name] = $this->getValue($collection->get($name), $nest);
+                $result[$name] = $this->getValue($collection->get($name), $nest, $parents);
             }
         }
 
@@ -38,8 +39,9 @@ class RecursiveOnly
      * @param  array $only
      * @return array
      */
-    public function recursiveOnlyForArr(array $array, array $only): array
+    public function recursiveOnlyForArr(array $array, array $only, array $parents = []): array
     {
+        $parents[] = $array;
         $result = [];
 
         foreach ($only as $name => $nest) {
@@ -47,10 +49,10 @@ class RecursiveOnly
 
             if ($name === '*') {
                 foreach ($array as $key => $value) {
-                    $result[$key] = $this->getValue($value, $nest);
+                    $result[$key] = $this->getValue($value, $nest, $parents);
                 }
             } else {
-                $result[$name] = $this->getValue($array[$name], $nest);
+                $result[$name] = $this->getValue($array[$name], $nest, $parents);
             }
         }
 
@@ -62,8 +64,9 @@ class RecursiveOnly
      * @param  array $only
      * @return array
      */
-    public function RecursiveOnly(Model $model, array $only): array
+    public function RecursiveOnly(Model $model, array $only, array $parents = []): array
     {
+        $parents[] = $model;
         $result = [];
 
         foreach ($only as $name => $nest) {
@@ -71,10 +74,10 @@ class RecursiveOnly
 
             if ($name === '*') {
                 foreach ($model->attributesToArray() as $key => $value) {
-                    $result[$key] = $this->getValue($value, $nest);
+                    $result[$key] = $this->getValue($value, $nest, $parents);
                 }
             } else {
-                $result[$name] = $this->getValue($model->$name, $nest);
+                $result[$name] = $this->getValue($model->$name, $nest, $parents);
             }
         }
 
@@ -86,16 +89,16 @@ class RecursiveOnly
      * @param  string|array|Closure $only
      * @return mixed
      */
-    private function getValue($value, $only)
+    private function getValue($value, $only, $parents)
     {
         if (is_array($only)) {
             if (is_array($value)) {
-                return Arr::recursiveOnly($value, $only);
+                return Arr::recursiveOnly($value, $only, $parents);
             } else {
-                return $value->recursiveOnly($only);
+                return $value->recursiveOnly($only, $parents);
             }
         } elseif (is_callable($only)) {
-            return $only($value);
+            return $only($value, ...array_reverse($parents));
         } else {
             return $value;
         }

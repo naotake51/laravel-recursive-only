@@ -12,13 +12,13 @@ class RecursiveOnlyServiceProvider extends ServiceProvider
     {
         $recursiveOnly = new RecursiveOnly();
 
-        Collection::macro('recursiveOnly', function (array $only) use ($recursiveOnly) {
+        Collection::macro('recursiveOnly', function (array $only, array $parents = []) use ($recursiveOnly) {
             /** @var Collection $this */
-            return $recursiveOnly->recursiveOnlyForCollection($this, $only);
+            return $recursiveOnly->recursiveOnlyForCollection($this, $only, $parents);
         });
 
-        Arr::macro('recursiveOnly', function (array $array, array $only) use ($recursiveOnly) {
-            return $recursiveOnly->recursiveOnlyForArr($array, $only);
+        Arr::macro('recursiveOnly', function (array $array, array $only, array $parents = []) use ($recursiveOnly) {
+            return $recursiveOnly->recursiveOnlyForArr($array, $only, $parents);
         });
     }
 }

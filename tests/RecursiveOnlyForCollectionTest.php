@@ -23,13 +23,16 @@ class RecursiveOnlyForCollectionTest extends TestCase
      * @return void
      * @dataProvider dataRecursiveOnly
      */
-    public function testRecursiveOnly(Collection $collection, array $only, Collection $expected)
+    public function testRecursiveOnly(Collection $collection, array $only, Collection $expected): void
     {
         $actual = $collection->recursiveOnly($only);
         $this->assertEquals($expected, $actual);
     }
 
-    public function dataRecursiveOnly()
+    /**
+     * @return array
+     */
+    public function dataRecursiveOnly(): array
     {
         return [
             'only' => [
@@ -132,5 +135,30 @@ class RecursiveOnlyForCollectionTest extends TestCase
                 ])
             ],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testRecursiveOnlyCallbackParentsChain(): void
+    {
+        $collection = collect([
+            'grand' => $grand = collect([
+                'parent' => $parent = collect([
+                    'current' => 1,
+                ]),
+            ]),
+        ]);
+
+        $collection->recursiveOnly([
+            'grand' => [
+                'parent' => [
+                    'current' => function ($value, ...$expected) use ($grand, $parent, $collection) {
+                        $this->assertSame($expected, [$parent, $grand, $collection]);
+                        return 'dummy';
+                    }
+                ]
+            ]
+        ]);
     }
 }

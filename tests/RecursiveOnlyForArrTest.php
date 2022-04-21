@@ -23,13 +23,16 @@ class RecursiveOnlyForArrTest extends TestCase
      * @return void
      * @dataProvider dataRecursiveOnly
      */
-    public function testRecursiveOnly(array $array, array $only, array $expected)
+    public function testRecursiveOnly(array $array, array $only, array $expected): void
     {
         $actual = Arr::recursiveOnly($array, $only);
         $this->assertEquals($expected, $actual);
     }
 
-    public function dataRecursiveOnly()
+    /**
+     * @return array
+     */
+    public function dataRecursiveOnly(): array
     {
         return [
             'only' => [
@@ -132,5 +135,30 @@ class RecursiveOnlyForArrTest extends TestCase
                 ]
             ],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testRecursiveOnlyCallbackParentsChain(): void
+    {
+        $array = [
+            'grand' => $grand = [
+                'parent' => $parent = [
+                    'current' => 1,
+                ],
+            ],
+        ];
+
+        Arr::recursiveOnly($array, [
+            'grand' => [
+                'parent' => [
+                    'current' => function ($value, ...$expected) use ($grand, $parent, $array) {
+                        $this->assertSame($expected, [$parent, $grand, $array]);
+                        return 'dummy';
+                    }
+                ]
+            ]
+        ]);
     }
 }
