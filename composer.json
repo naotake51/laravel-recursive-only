@@ -1,0 +1,33 @@
+{
+    "name": "naotake51/laravel-recursive-only",
+    "description": "Register recursiveOnly() extending only() to Model, Collection and Arr.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Naotake51\\RecursiveOnly\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Naotake51\\RecursiveOnly\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "n-takeshita",
+            "email": "naokisyuu@gmail.com"
+        }
+    ],
+    "keywords": ["laravel", "library", "only", "macro", "model", "eloquent", "illuminate", "collection"],
+    "require-dev": {
+        "orchestra/testbench": "^7.4"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Naotake51\\RecursiveOnly\\RecursiveOnlyServiceProvider"
+            ]
+        }
+    }
+}
