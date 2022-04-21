@@ -28,12 +28,15 @@ class RecursiveOnlyForModelTest extends TestCase
      * @return void
      * @dataProvider dataRecursiveOnly
      */
-    public function testRecursiveOnly(Model $model, array $only, array $expected)
+    public function testRecursiveOnly(Model $model, array $only, array $expected): void
     {
         $actual = $model->recursiveOnly($only);
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function dataRecursiveOnly(): array
     {
         return [
@@ -132,5 +135,38 @@ class RecursiveOnlyForModelTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testRecursiveOnlyCallbackParentsChain(): void
+    {
+        $model = (new Post)->fill([
+            'title' => 'aaaa',
+            'body' => 'bbbb'
+        ])->setRelations([
+            'comments' => $comments = new EloquentCollection([
+                (new Comment)->fill([
+                    'body' => 'xxxx',
+                    'order' => 1,
+                ]),
+                (new Comment)->fill([
+                    'body' => 'yyyy',
+                    'order' => 2,
+                ]),
+            ]),
+        ]);
+
+        $model->recursiveOnly([
+            'comments' => [
+                '0' => [
+                    'body' => function ($value, ...$expected) use ($comments, $model) {
+                        $this->assertSame($expected, [$comments[0], $comments, $model]);
+                        return 'dummy';
+                    }
+                ]
+            ]
+        ]);
     }
 }
