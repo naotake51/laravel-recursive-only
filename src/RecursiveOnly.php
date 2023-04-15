@@ -64,7 +64,7 @@ class RecursiveOnly
      * @param  array $only
      * @return array
      */
-    public function RecursiveOnly(Model $model, array $only, array $parents = []): array
+    public function recursiveOnlyForModel(Model $model, array $only, array $parents = []): array
     {
         $parents[] = $model;
         $result = [];

@@ -8,6 +8,6 @@ trait RecursiveOnly
 {
     public function recursiveOnly(array $only, array $parents = []): array
     {
-        return (new RecursiveOnlyImpl())->RecursiveOnly($this, $only, $parents);
+        return (new RecursiveOnlyImpl())->recursiveOnlyForModel($this, $only, $parents);
     }
 }
