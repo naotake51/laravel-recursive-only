@@ -59,7 +59,7 @@ $data = $post->recursiveOnly([
     ]
 ]);
 
-// [
+// $data => [
 //     'author' => [
 //         'name' => '...'
 //     ],
@@ -89,7 +89,7 @@ $data = $posts->recursiveOnly([
     ]
 ]);
 
-// Illuminate\Support\Collection([
+// $data => Illuminate\Support\Collection([
 //     [
 //         'author' => [
 //             'name' => '...'
@@ -123,7 +123,7 @@ $data = Arr::recursiveOnly($posts, [
     ]
 ]);
 
-// [
+// $data => [
 //     [
 //         'author' => [
 //             'name' => '...'
